@@ -1,5 +1,6 @@
 # JSFuck Decoder
-Online JSFuck Decoder (only works for eval source) [Online Decoder](http://enkhee-Osiris.github.io/Decoder-JSFuck)
+Online JSFuck Decoder (only works for eval source) 
+[Online Decoder](http://enkhee-Osiris.github.io/Decoder-JSFuck)
 ===
 Crafted with <3 by Osiris.
 
