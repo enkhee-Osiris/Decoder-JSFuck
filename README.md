@@ -3,7 +3,7 @@ Online JSFuck Decoder (only works for eval source)
 
 **Links**
 - [Online Decoder](http://enkhee-Osiris.github.io/Decoder-JSFuck)
-- [JSFuck](http://www.jsfuck.com**
+- [JSFuck](http://www.jsfuck.com)
 
 **Crafted with <3 by Osiris.**
 
