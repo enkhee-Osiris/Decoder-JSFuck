@@ -1,12 +1,25 @@
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>JSfuck Decoder | De-Obfuscator</title>
-    <meta name="description" content="JSFuck decoder, de-obfuscator" />
-    <meta property="og:title" content="JSFuck de-obfuscator" />
-    <meta property="og:type" content="article" />
-    <meta property="og:url" content="https://enkhee-osiris.github.io/Decoder-JSFuck/" />
-    <meta property="og:description" content="JSFuck decoder, de-obfuscator" />
+    <meta name="description" content=
+    "JSFuck decoder, de-obfuscator">
+    <meta property="og:title" content="JSFuck de-obfuscator">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content=
+    "https://enkhee-osiris.github.io/Decoder-JSFuck/">
+    <meta property="og:description" content=
+    "JSFuck decoder, de-obfuscator">
+    <link rel="icon" href="assets/favicon-16x16.png" sizes="16x16">
+    <link rel="icon" href="assets/favicon-32x32.png" sizes="32x32">
+    <link rel="shortcut icon" href=
+    "assets/android-chrome-192x192.png" sizes="196x196">
+    <link rel="shortcut icon" href=
+    "assets/android-chrome-512x512.png" sizes="512x512">
+    <link rel="apple-touch-icon" href=
+    "assets/apple-touch-icon.png">
+    <link rel="icon" href="assets/favicon.ico">
     <style type="text/css">
         @import 'https://fonts.googleapis.com/css?family=Open+Sans:300';
         * {
@@ -26,6 +39,9 @@
             background: #52B3D9;
             font-family: 'Open Sans', sans-serif;
             text-align: center;
+        }
+        body div + div {
+            margin-top: 1rem;
         }
         h1 {
             font-weight: 300;
@@ -50,7 +66,7 @@
             -webkit-transition: all 0.2s ease-in;
             transition: all 0.2s ease-in;
         }
-        input {
+        input[type="submit"] {
             margin: 0 auto;
             position: relative;
             vertical-align: top;
@@ -69,27 +85,24 @@
             -webkit-box-shadow: inset 0 -2px #2475ab;
             box-shadow: inset 0 -2px #2475ab;
         }
-        input:active {
+        input[type="submit"]:active {
             top: 1px;
             outline: none;
             -webkit-box-shadow: none;
             box-shadow: none;
         }
-        input:-ms-input-placeholder,
         textarea:-ms-input-placeholder {
             color: #fff;
             font-size: 20px;
             font-weight: 300;
             text-transform: uppercase;
         }
-        input::-moz-placeholder,
         textarea::-moz-placeholder {
             color: #fff;
             font-size: 20px;
             font-weight: 300;
             text-transform: uppercase;
         }
-        input::-webkit-input-placeholder,
         textarea::-webkit-input-placeholder {
             color: #fff;
             font-size: 20px;
@@ -121,72 +134,131 @@
     </style>
 </head>
 <body>
-    <h1>Wanna decode <font color="#f0f060">JSFuck?</font></h1>
-    <textarea placeholder="Paste your code here!" id="code" style="width:100%;min-height:300px"></textarea>
-    <input type="submit" onclick="decode()" value="Decode" />
+    <div>
+        <h1>Wanna decode <span style=
+        "color: #F0F060">JSFuck?</span></h1>
+    </div>
+    <div>
+        <label for="versions">Choose a JSFuck version:</label>
+        <select name="versions" id="versions">
+            <option value="latest">
+                Latest
+            </option>
+            <option value="0.5.0">
+                v0.5.0
+            </option>
+            <option value="0.4.0">
+                v0.4.0
+            </option>
+            <option value="0.3.0">
+                v0.3.0
+            </option>
+            <option value="0.2.0">
+                v0.2.0
+            </option>
+            <option value="0.1.2">
+                v0.1.2
+            </option>
+        </select> <label for="withEval">&nbsp;&nbsp;With
+        eval:</label> <input type="checkbox" id="withEval" name=
+        "withEval" value="withEval" checked>
+    </div>
+    <div>
+        <textarea placeholder="Paste your code here!" id="code"
+        style="width:100%;min-height:300px"></textarea>
+        <input type="submit" onclick="decode()" value="Decode">
+    </div>
     <footer>
-        <p align="center">Crafted with <span style="color: #2980b9">♥</span> by <a href="http://github.com/enkhee-Osiris">Osiris</a>.</p>
+        <p style="text-align: center">Crafted with <span style=
+        "color: #2980b9">♥</span> by <a href=
+        "http://github.com/enkhee-Osiris">Osiris</a>.</p>
     </footer>
+    <script src="http://www.jsfuck.com/jsfuck.js"></script>
+    <script type="text/javascript">
+
+        (function(){
+            var select = document.getElementById('versions');
+            function handleChange(event) {
+                var script = document.querySelector('script[src]');
+
+                var version = event.target.value;
+                var link = '';
+                if (version === 'latest') {
+                    link = 'http://www.jsfuck.com/jsfuck.js';
+                } else {
+                    link = 'lib/jsfuck@' + version + '.js';
+                }
+
+                var jsFuckScript = document.createElement('script');
+                jsFuckScript.src = link;
+                script.remove();
+                document.body.appendChild(jsFuckScript);
+            };
+
+            select.addEventListener('change', handleChange);
+        })();
+
+        function patternCreator(prefix, postfix) {
+            var replacedPrefix = prefix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
+            var replacedPostfix = postfix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
+
+            return replacedPrefix + '(.*)' + replacedPostfix;
+        }
+
+        function isMatching(string, pattern) {
+            var result = string.match(new RegExp(pattern));
+            if (result) return result[1];
+
+            return null;
+        }
+
+        function setDecoded(decodedCode) {
+            var code = document.getElementById('code');
+            code.value = eval(decodedCode);
+        }
+
+        function decode() {
+            var code = document.getElementById('code');
+            var withEval = document.getElementById('withEval');
+
+            if (withEval.checked) {
+                var functionNames = ['flat', 'fill', 'filter'];
+                var prefix = '';
+                var postfix = '';
+                var result = null;
+
+                for (let i = 0; i < functionNames.length; i++) {
+                    var functionName = functionNames[i];
+
+                    if (functionName !== 'filter') {
+                        prefix = '[][' + JSFuck.encode(functionName) + ']' +
+                                 '[' + JSFuck.encode('constructor') + ']' +
+                                 '(' + JSFuck.encode('return eval') + ')()(';
+                        postfix = ')';
+                        result = isMatching(code.value, patternCreator(prefix, postfix));
+
+                        if (result) {
+                            setDecoded(result);
+
+                            break;
+                        }
+                    }
+
+                    prefix = '[][' + JSFuck.encode(functionName) + ']' +
+                             '[' + JSFuck.encode('constructor') + '](';
+                    postfix = ')()';
+                    result = isMatching(code.value, patternCreator(prefix, postfix));
+
+                    if (result) {
+                        setDecoded(result);
+
+                        break;
+                    }
+                }
+            } else {
+                setDecoded(code.value);
+            }
+        }
+    </script>
 </body>
-<script src="https://unpkg.com/jsfuck@0.4.0/jsfuck.js"></script>
-<script type="text/javascript">
-    function patternCreator(prefix, postfix) {
-        replacedPrefix = prefix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
-        replacedPostfix = postfix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
-
-        return replacedPrefix + '(.*)' + replacedPostfix;
-    }
-
-    function isMatching(string, pattern) {
-        var result = string.match(new RegExp(pattern));
-        if (result) return result[1];
-
-        return null;
-    }
-
-    function setDecoded(decodedCode) {
-        var code = document.querySelector('#code');
-        code.value = eval(decodedCode);
-    }
-
-    function decode() {
-        var code = document.querySelector('#code');
-
-        var prefix = '[][' + JSFuck.encode('fill') + ']' +
-                     '[' + JSFuck.encode('constructor') + ']' +
-                     '(' + JSFuck.encode('return eval') + ')()(';
-        var postfix = ')';
-        var result = isMatching(code.value, patternCreator(prefix, postfix));
-
-        if (result) {
-            setDecoded(result);
-
-            return;
-        }
-
-        prefix = '[][' + JSFuck.encode('fill') + ']' +
-                 '[' + JSFuck.encode('constructor') + '](';
-        postfix = ')()';
-        result = isMatching(code.value, patternCreator(prefix, postfix));
-
-        if (result) {
-            setDecoded(result);
-
-            return;
-        }
-
-        prefix = '[][' + JSFuck.encode('filter') + ']' +
-                 '[' + JSFuck.encode('constructor') + '](';
-        postfix = ')()';
-        result = isMatching(code.value, patternCreator(prefix, postfix));
-
-        if (result) {
-            setDecoded(result);
-
-            return;
-        }
-
-        setDecoded(code.value);
-    }
-</script>
 </html>
