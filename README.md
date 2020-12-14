@@ -1,6 +1,7 @@
 [![enkhee-Osiris](https://img.shields.io/badge/creator-enkhee--osiris-blue.svg)](https://github.com/enkhee-Osiris) [![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](http://enkhee-Osiris.github.io/Decoder-JSFuck)
 
 # JSFuck Decoder
+
 Online JSFuck Decoder
 
 ```
@@ -10,6 +11,7 @@ UPDATED 2018-10-30
 ```
 
 **Links**
+
 - [Online Decoder](http://enkhee-Osiris.github.io/Decoder-JSFuck)
 - [JSFuck](http://www.jsfuck.com)
 
