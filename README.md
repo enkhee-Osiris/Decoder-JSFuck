@@ -5,6 +5,9 @@
 Online JSFuck Decoder
 
 ```
+UPDATED 2020-12-14
+ - Added jsfuck version selection
+ - Added eval checkbox
 UPDATED 2018-10-30
  - Now supports without eval
  - Fixed old bugs
