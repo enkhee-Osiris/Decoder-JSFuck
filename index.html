@@ -143,9 +143,6 @@
     <div>
         <label for="versions">Choose a JSFuck version:</label>
         <select name="versions" id="versions">
-            <option value="latest">
-                Latest
-            </option>
             <option value="0.5.0">
                 v0.5.0
             </option>
@@ -175,7 +172,7 @@
         "color: #2980b9">♥</span> by <a href=
         "http://github.com/enkhee-Osiris">Osiris</a>.</p>
     </footer>
-    <script src="//www.jsfuck.com/jsfuck.js"></script>
+    <script src="lib/jsfuck@0.5.0.js"></script>
     <script type="text/javascript">
 
         (function(){
@@ -184,12 +181,7 @@
                 var script = document.querySelector('script[src]');
 
                 var version = event.target.value;
-                var link = '';
-                if (version === 'latest') {
-                    link = 'http://www.jsfuck.com/jsfuck.js';
-                } else {
-                    link = 'lib/jsfuck@' + version + '.js';
-                }
+                var link = 'lib/jsfuck@' + version + '.js';
 
                 var jsFuckScript = document.createElement('script');
                 jsFuckScript.src = link;
