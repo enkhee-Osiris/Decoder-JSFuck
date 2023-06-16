@@ -172,85 +172,79 @@
     </footer>
     <script src="lib/jsfuck@0.5.0.js"></script>
     <script type="text/javascript">
+(() => {
+    const select = document.getElementById('versions');
 
-        (function(){
-            var select = document.getElementById('versions');
-            function handleChange(event) {
-                var script = document.querySelector('script[src]');
+    const handleChange = (event) => {
+        const script = document.querySelector('script[src]');
+        const version = event.target.value;
+        const link = `lib/jsfuck@${version}.js`;
 
-                var version = event.target.value;
-                var link = 'lib/jsfuck@' + version + '.js';
+        const jsFuckScript = document.createElement('script');
+        jsFuckScript.src = link;
+        script.remove();
+        document.body.appendChild(jsFuckScript);
+    };
 
-                var jsFuckScript = document.createElement('script');
-                jsFuckScript.src = link;
-                script.remove();
-                document.body.appendChild(jsFuckScript);
-            };
+    select.addEventListener('change', handleChange);
+})();
 
-            select.addEventListener('change', handleChange);
-        })();
+const patternCreator = (prefix, postfix) => {
+    const replacedPrefix = prefix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
+    const replacedPostfix = postfix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
 
-        function patternCreator(prefix, postfix) {
-            var replacedPrefix = prefix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
-            var replacedPostfix = postfix.replace(/[\[\]\(\)\+\!]/g, '\\$&');
+    return `${replacedPrefix}(.*)${replacedPostfix}`;
+};
 
-            return replacedPrefix + '(.*)' + replacedPostfix;
-        }
+const isMatching = (string, pattern) => {
+    const result = string.match(new RegExp(pattern));
+    return result ? result[1] : null;
+};
 
-        function isMatching(string, pattern) {
-            var result = string.match(new RegExp(pattern));
-            if (result) return result[1];
+const setDecoded = (decodedCode) => {
+    const code = document.getElementById('code');
+    code.value = eval(decodedCode);
+};
 
-            return null;
-        }
+const decode = () => {
+    const code = document.getElementById('code');
+    const withEval = document.getElementById('withEval');
 
-        function setDecoded(decodedCode) {
-            var code = document.getElementById('code');
-            code.value = eval(decodedCode);
-        }
+    if (withEval.checked) {
+        const functionNames = ['flat', 'fill', 'filter'];
+        let prefix = '';
+        let postfix = '';
+        let result = null;
 
-        function decode() {
-            var code = document.getElementById('code');
-            var withEval = document.getElementById('withEval');
+        for (const functionName of functionNames) {
+            if (functionName !== 'filter') {
+                prefix = `[][${JSFuck.encode(functionName)}]` +
+                         `[${JSFuck.encode('constructor')}]` +
+                         `(${JSFuck.encode('return eval')})()(`;
+                postfix = ')';
+                result = isMatching(code.value, patternCreator(prefix, postfix));
 
-            if (withEval.checked) {
-                var functionNames = ['flat', 'fill', 'filter'];
-                var prefix = '';
-                var postfix = '';
-                var result = null;
-
-                for (let i = 0; i < functionNames.length; i++) {
-                    var functionName = functionNames[i];
-
-                    if (functionName !== 'filter') {
-                        prefix = '[][' + JSFuck.encode(functionName) + ']' +
-                                 '[' + JSFuck.encode('constructor') + ']' +
-                                 '(' + JSFuck.encode('return eval') + ')()(';
-                        postfix = ')';
-                        result = isMatching(code.value, patternCreator(prefix, postfix));
-
-                        if (result) {
-                            setDecoded(result);
-
-                            break;
-                        }
-                    }
-
-                    prefix = '[][' + JSFuck.encode(functionName) + ']' +
-                             '[' + JSFuck.encode('constructor') + '](';
-                    postfix = ')()';
-                    result = isMatching(code.value, patternCreator(prefix, postfix));
-
-                    if (result) {
-                        setDecoded(result);
-
-                        break;
-                    }
+                if (result) {
+                    setDecoded(result);
+                    break;
                 }
-            } else {
-                setDecoded(code.value);
+            }
+
+            prefix = `[][${JSFuck.encode(functionName)}]` +
+                     `[${JSFuck.encode('constructor')}](`;
+            postfix = ')()';
+            result = isMatching(code.value, patternCreator(prefix, postfix));
+
+            if (result) {
+                setDecoded(result);
+                break;
             }
         }
+    } else {
+        setDecoded(code.value);
+    }
+};
+
     </script>
 </body>
 </html>
